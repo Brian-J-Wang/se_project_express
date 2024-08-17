@@ -3,7 +3,9 @@ module.exports = {
     es2021: true,
     node: true,
   },
-  extends: "airbnb-base",
+
+  // Add the necessary extensions.
+  extends: ["eslint:recommended", "airbnb-base", "prettier"],
   overrides: [
     {
       env: {
@@ -19,5 +21,6 @@ module.exports = {
     ecmaVersion: "latest",
     sourceType: "module",
   },
-  rules: {},
+  rules: {
+  },
 };
