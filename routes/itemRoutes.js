@@ -1,6 +1,7 @@
+const itemRouter = require('express').Router();
 const { getItems, createItem, deleteItem, likeItem, unlikeItem } = require('../controllers/itemController');
 
-const itemRouter = require('express').Router();
+
 
 itemRouter.get('/', getItems);
 

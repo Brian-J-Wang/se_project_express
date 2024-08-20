@@ -7,7 +7,6 @@ module.exports.getItems = (req, res) => {
     res.send(items)
   })
   .catch(err => {
-    console.log(err.name);
     Error500(res, err);
   })
 }
@@ -15,13 +14,13 @@ module.exports.getItems = (req, res) => {
 module.exports.createItem = (req, res) => {
   const { name, weather, imageUrl } = req.body;
   item.create({
-    name: name,
-    weather: weather,
-    imageUrl: imageUrl,
+    name,
+    weather,
+    imageUrl,
     owner: req.user._id
-  }).then((item) => {
+  }).then((itemData) => {
     res.status(200);
-    res.send(item);
+    res.send(itemData);
   })
   .catch(err => {
     if (err.name === 'ValidationError') {
@@ -41,9 +40,9 @@ module.exports.deleteItem = (req, res) => {
     error.name = "MissingItem";
     throw error;
   })
-  .then((item) => {
+  .then((itemData) => {
     res.status(200);
-    res.send(item);
+    res.send(itemData);
   })
   .catch(err => {
     if (err.name === 'CastError') {
@@ -65,9 +64,9 @@ module.exports.likeItem = (req, res) => {
     error.name = "InvalidId";
     throw error;
   })
-  .then((item) => {
+  .then((itemData) => {
     res.status(200);
-    res.send(item);
+    res.send(itemData);
   })
   .catch(err => {
     if (err.name === "CastError") {
@@ -89,9 +88,9 @@ module.exports.unlikeItem = (req, res) => {
     error.name = "MissingResource";
     throw error;
   })
-  .then((item) => {
+  .then((itemData) => {
     res.status(200);
-    res.send(item);
+    res.send(itemData);
   })
   .catch(err => {
     if (err.name === "CastError") {

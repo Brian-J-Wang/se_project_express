@@ -1,4 +1,3 @@
-const mongoose = require('mongoose');
 const user = require('../models/user');
 const { Error500, Error400, Error404 } = require('../utils/error');
 
@@ -20,8 +19,8 @@ module.exports.getUser = (req, res) => {
     error.name = "MissingResource";
     throw error;
   })
-  .then((user) => {
-    res.send(user);
+  .then((userData) => {
+    res.send(userData);
   })
   .catch(err => {
     if (err.name === 'CastError') {
@@ -38,11 +37,11 @@ module.exports.getUser = (req, res) => {
 module.exports.createUser = (req, res) => {
   const { name, avatar } = req.body;
   user.create({
-    name: name,
-    avatar: avatar
-  }).then((user) => {
+    name,
+    avatar
+  }).then((userData) => {
     res.status(200);
-    res.send(user);
+    res.send(userData);
   })
   .catch(err => {
     if (err.name === 'ValidationError') {
