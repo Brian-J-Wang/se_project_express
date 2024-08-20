@@ -11,11 +11,13 @@ const userSchema = new mongoose.Schema({
   avatar: {
     type: String,
     required: true,
-    validator: {
+    validate: {
       validator(value) {
         return validator.isURL(value);
       },
       message: 'You must enter a valid URL',
     }
   }
-})
+});
+
+module.exports = mongoose.model('user', userSchema);

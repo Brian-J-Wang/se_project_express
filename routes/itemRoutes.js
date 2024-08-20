@@ -1,9 +1,11 @@
 const { getItems, createItem, deleteItem } = require('../controllers/itemController');
 
-const itemRoutes = require('express').Router();
+const itemRouter = require('express').Router();
 
-itemRoutes.get('/', getItems);
+itemRouter.get('/', getItems);
 
-itemRoutes.post('/', createItem);
+itemRouter.post('/', createItem);
 
-itemRoutes.delete('/:itemId', deleteItem);
+itemRouter.delete('/:itemId', deleteItem);
+
+module.exports = itemRouter;

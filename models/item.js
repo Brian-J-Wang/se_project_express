@@ -16,7 +16,7 @@ const itemSchema = new mongoose.Schema({
   imageUrl: {
     type: String,
     required: true,
-    validator: {
+    validate: {
       validator (value) {
         return validator.isURL(value);
       },
@@ -37,3 +37,5 @@ const itemSchema = new mongoose.Schema({
     default: Date.now(),
   }
 })
+
+module.exports = mongoose.model('item', itemSchema);
