@@ -1,4 +1,6 @@
 {
+  "name": "se_project_express",
+  "author": "Brian J Wang",
   "dependencies": {
     "express": "^4.19.2",
     "mongoose": "^6.6.1",
