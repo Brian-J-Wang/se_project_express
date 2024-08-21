@@ -7,7 +7,7 @@ module.exports.getUsers = (req, res) => {
     res.send(users);
   })
   .catch(err => {
-    Error500(res, err);
+    Error500(res);
   });
 }
 
@@ -24,12 +24,12 @@ module.exports.getUser = (req, res) => {
   })
   .catch(err => {
     if (err.name === 'CastError') {
-      Error400(res, err);
+      Error400(res);
     } else if (err.name === "MissingResource") {
-      Error404(res, err);
+      Error404(res);
     }
     else {
-      Error500(res, err);
+      Error500(res);
     }
   })
 }
@@ -45,9 +45,9 @@ module.exports.createUser = (req, res) => {
   })
   .catch(err => {
     if (err.name === 'ValidationError') {
-      Error400(res, err);
+      Error400(res);
     } else {
-      Error500(res, err);
+      Error500(res);
     }
   });
 }

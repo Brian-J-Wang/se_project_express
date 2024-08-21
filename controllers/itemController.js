@@ -24,9 +24,9 @@ module.exports.createItem = (req, res) => {
   })
   .catch(err => {
     if (err.name === 'ValidationError') {
-      Error400(res, err);
+      Error400(res);
     } else {
-      Error500(res, err);
+      Error500(res);
     }
   });
 }
@@ -46,11 +46,11 @@ module.exports.deleteItem = (req, res) => {
   })
   .catch(err => {
     if (err.name === 'CastError') {
-      Error400(res, err);
+      Error400(res);
     } else if (err.name === 'MissingItem') {
-      Error404(res, err);
+      Error404(res);
     } else {
-      Error500(res, err);
+      Error500(res);
     }
   })
 }
@@ -70,11 +70,11 @@ module.exports.likeItem = (req, res) => {
   })
   .catch(err => {
     if (err.name === "CastError") {
-      Error400(res, err);
+      Error400(res);
     } else if (err.name === "InvalidId") {
-      Error404(res, err);
+      Error404(res);
     } else {
-      Error500(res, err);
+      Error500(res);
     }
   })
 }
@@ -94,11 +94,11 @@ module.exports.unlikeItem = (req, res) => {
   })
   .catch(err => {
     if (err.name === "CastError") {
-      Error400(res, err);
+      Error400(res);
     } else if (err.name === "MissingResource") {
-      Error404(res, err);
+      Error404(res);
     } else {
-      Error500(res, err);
+      Error500(res);
     }
   })
 }
