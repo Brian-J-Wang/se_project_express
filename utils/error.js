@@ -12,9 +12,30 @@ module.exports.Error400 = (res) => {
   });
 }
 
+module.exports.Error401 = (res, message = null) => {
+  res.status(401);
+  res.send({
+    message: message == null ? "Incorrect email or password" : message
+  });
+}
+
+module.exports.Error403 = (res, message = null) => {
+  res.status(403);
+  res.send({
+    message: message == null ? "Forbidden" : message
+  })
+}
+
 module.exports.Error404 = (res) => {
   res.status(404);
   res.send({
     message: "Resource not found"
   });
+}
+
+module.exports.Error409 = (res) => {
+  res.status(409);
+  res.send({
+    message: "Email Conflict"
+  })
 }

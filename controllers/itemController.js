@@ -1,4 +1,4 @@
-const { Error500, Error400, Error404 } = require('../utils/error');
+const { Error500, Error400, Error404, Error403 } = require('../utils/error');
 const item = require('../models/item');
 
 module.exports.getItems = (req, res) => {
@@ -17,7 +17,7 @@ module.exports.createItem = (req, res) => {
     name,
     weather,
     imageUrl,
-    owner: req.user._id
+    owner: req.user
   }).then((itemData) => {
     res.status(200);
     res.send(itemData);
@@ -33,12 +33,21 @@ module.exports.createItem = (req, res) => {
 
 module.exports.deleteItem = (req, res) => {
   const id = req.params.itemId;
-  item.deleteOne({
-    _id: id
-  }).orFail(() => {
+
+  item.findById(id)
+  .orFail(() => {
     const error = Error("Item does not exist");
     error.name = "MissingItem";
     throw error;
+  })
+  .then(item => {
+    if (item.owner.toString() == req.user._id) {
+      return item.deleteOne({ _id: id});
+    } else {
+      const error = Error("User does not own this item");
+      error.name = "OwnerMismatch";
+      return Promise.reject(error);
+    }
   })
   .then((itemData) => {
     res.status(200);
@@ -48,7 +57,9 @@ module.exports.deleteItem = (req, res) => {
     if (err.name === 'CastError') {
       Error400(res);
     } else if (err.name === 'MissingItem') {
-      Error404(res);
+      Error404(res, err.message);
+    } else if (err.name === 'OwnerMismatch') {
+      Error403(res, err.message);
     } else {
       Error500(res);
     }
