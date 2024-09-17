@@ -16,6 +16,14 @@ app.use(cors);
 
 app.use(express.json());
 
+app.use((req, res, next) => {
+  req.user = {
+    _id: '...'
+  };
+
+  next();
+})
+
 app.use('/users', userRouter);
 
 app.post('/signin', login);
