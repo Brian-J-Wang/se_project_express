@@ -1,7 +1,7 @@
-const user = require('../models/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const secret = require('../utils/config').secret;
+const user = require('../models/user');
+const {secret} = require('../utils/config');
 const { Error500, Error400, Error404, Error409, Error401 } = require('../utils/error');
 
 module.exports.getUsers = (req, res) => {
@@ -41,14 +41,12 @@ module.exports.createUser = (req, res) => {
   const { name, avatar, email, password } = req.body;
 
   bcrypt.hash(password, 10)
-  .then( hash => {
-    return user.create({
+  .then( hash => user.create({
       name,
       avatar,
       email,
       password: hash
-    })
-  })
+    }))
   .then((userData) => {
     const returnData = {
       _id: userData._id,
@@ -85,23 +83,19 @@ module.exports.login = (req, res) => {
       expiresIn: "7d",
     });
 
-    console.log(token);
-
     res.send(token);
   })
-  .catch(err => {
+  .catch(() => {
     Error401(res);
   })
 }
 
 module.exports.getCurrentUser = (req, res) => {
   user.findOne({ _id: req.user })
-  .then(user => {
-    res.send(user);
+  .then(userData => {
+    res.send(userData);
   })
-  .catch(err => {
-    console.log(err.name);
-
+  .catch(() => {
     Error404(res);
   });
 }
@@ -110,19 +104,17 @@ module.exports.updateUserProfile = (req, res) => {
   const { name, avatar } = req.body;
   user.findByIdAndUpdate(req.user,
     {
-      name: name,
-      avatar: avatar
+      name,
+      avatar
     }, {
       new: true,
       runValidators: true,
       upsert: false
     }
-  ).then(user => {
-    res.send(user);
+  ).then(userData => {
+    res.send(userData);
   })
-  .catch(err => {
-    console.log(err);
-
+  .catch(() => {
     Error404(res);
   })
 }

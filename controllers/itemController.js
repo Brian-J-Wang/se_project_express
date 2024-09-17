@@ -40,14 +40,14 @@ module.exports.deleteItem = (req, res) => {
     error.name = "MissingItem";
     throw error;
   })
-  .then(item => {
-    if (item.owner.toString() == req.user._id) {
-      return item.deleteOne({ _id: id});
-    } else {
+  .then(itemData => {
+    if (itemData.owner.toString() === req.user._id) {
+      return itemData.deleteOne({ _id: id});
+    }
       const error = Error("User does not own this item");
       error.name = "OwnerMismatch";
       return Promise.reject(error);
-    }
+
   })
   .then((itemData) => {
     res.status(200);
