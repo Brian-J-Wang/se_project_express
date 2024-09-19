@@ -26,10 +26,10 @@ module.exports.Error403 = (res, message = null) => {
   })
 }
 
-module.exports.Error404 = (res) => {
+module.exports.Error404 = (res, message = null) => {
   res.status(404);
   res.send({
-    message: "Resource not found"
+    message: message == null ? "Not Found" : message
   });
 }
 

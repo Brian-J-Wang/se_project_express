@@ -1,7 +1,10 @@
 const itemRouter = require('express').Router();
 const { getItems, createItem, deleteItem, likeItem, unlikeItem } = require('../controllers/itemController');
+const { authorize } = require('../middlewares/auth')
 
 itemRouter.get('/', getItems);
+
+itemRouter.use(authorize);
 
 itemRouter.post('/', createItem);
 

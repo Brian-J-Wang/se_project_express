@@ -4,39 +4,6 @@ const user = require('../models/user');
 const {secret} = require('../utils/config');
 const { Error500, Error400, Error404, Error409, Error401 } = require('../utils/error');
 
-module.exports.getUsers = (req, res) => {
-  user.find({})
-  .then(users => {
-    res.send(users);
-  })
-  .catch(() => {
-    Error500(res);
-  });
-}
-
-module.exports.getUser = (req, res) => {
-  const { userId } = req.params;
-  user.findById(userId)
-  .orFail(() => {
-    const error = Error("Requested resource not found");
-    error.name = "MissingResource";
-    throw error;
-  })
-  .then((userData) => {
-    res.send(userData);
-  })
-  .catch(err => {
-    if (err.name === 'CastError') {
-      Error400(res);
-    } else if (err.name === "MissingResource") {
-      Error404(res);
-    }
-    else {
-      Error500(res);
-    }
-  })
-}
-
 module.exports.createUser = (req, res) => {
   const { name, avatar, email, password } = req.body;
 
@@ -83,20 +50,31 @@ module.exports.login = (req, res) => {
       expiresIn: "7d",
     });
 
-    res.send(token);
+    res.send({ token });
   })
-  .catch(() => {
-    Error401(res);
+  .catch((err) => {
+    if (err.message === 'Incorrect email or password') {
+      Error401(res, err.message);
+    } else {
+      Error500(res);
+    }
   })
 }
 
 module.exports.getCurrentUser = (req, res) => {
   user.findOne({ _id: req.user })
+  .orFail(() => {
+    return Promise.reject(new Error("User not Found"));
+  })
   .then(userData => {
     res.send(userData);
   })
-  .catch(() => {
-    Error404(res);
+  .catch(err => {
+    if (err.message === "User not Found") {
+      Error404(res, err.message);
+    } else {
+      Error500(res);
+    }
   });
 }
 
@@ -108,13 +86,20 @@ module.exports.updateUserProfile = (req, res) => {
       avatar
     }, {
       new: true,
-      runValidators: true,
-      upsert: false
+      runValidators: true
     }
-  ).then(userData => {
+  ).orFail(() => {
+    return Promise.reject(new Error("User not Found"));
+  }).then(userData => {
     res.send(userData);
   })
   .catch(() => {
-    Error404(res);
+    if (err.name === "ValidationError") {
+      Error400(res);
+    } else if (err.message === "User not Found") {
+      Error404(res);
+    } else {
+      Error500(res);
+    }
   })
 }
