@@ -63,9 +63,7 @@ module.exports.login = (req, res) => {
 
 module.exports.getCurrentUser = (req, res) => {
   user.findOne({ _id: req.user })
-  .orFail(() => {
-    return Promise.reject(new Error("User not Found"));
-  })
+  .orFail(() => Promise.reject(new Error("User not Found")))
   .then(userData => {
     res.send(userData);
   })
@@ -88,12 +86,10 @@ module.exports.updateUserProfile = (req, res) => {
       new: true,
       runValidators: true
     }
-  ).orFail(() => {
-    return Promise.reject(new Error("User not Found"));
-  }).then(userData => {
-    res.send(userData);
-  })
-  .catch(() => {
+  ).orFail(() => Promise.reject(new Error("User not Found")))
+  .then(userData => res.send(userData)
+  )
+  .catch((err) => {
     if (err.name === "ValidationError") {
       Error400(res);
     } else if (err.message === "User not Found") {

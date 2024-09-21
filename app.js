@@ -5,8 +5,6 @@ const cors = require('cors');
 
 const index = require('./routes/index');
 
-const { authorize } = require('./middlewares/auth');
-
 const userRouter = require('./routes/userRoutes');
 const itemRouter = require('./routes/itemRoutes');
 const { Error404 } = require('./utils/error');
