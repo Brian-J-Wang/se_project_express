@@ -63,7 +63,7 @@ module.exports.login = (req, res) => {
 
 module.exports.getCurrentUser = (req, res) => {
   user.findOne({ _id: req.user })
-  .orFail(() => Promise.reject(new Error("User not Found")))
+  .orFail(new Error("User not Found"))
   .then(userData => {
     res.send(userData);
   })
@@ -86,7 +86,7 @@ module.exports.updateUserProfile = (req, res) => {
       new: true,
       runValidators: true
     }
-  ).orFail(() => Promise.reject(new Error("User not Found")))
+  ).orFail(new Error("User not Found"))
   .then(userData => res.send(userData)
   )
   .catch((err) => {
