@@ -2,6 +2,7 @@ const { PORT = 3001 } = process.env;
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const errorHandler = require('./middlewares/error-handler');
 
 const index = require('./routes/index');
 
@@ -24,5 +25,7 @@ app.use('/items', itemRouter);
 app.use((req, res) => {
   Error404(res);
 })
+
+app.use(errorHandler);
 
 app.listen(PORT, () => {})
