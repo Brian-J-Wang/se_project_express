@@ -2,10 +2,10 @@ const { PORT = 3001 } = process.env;
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const errorHandler = require('./middlewares/errorHandler');
+const { errors } = require('celebrate');
 
 const index = require('./routes/index');
-
+const errorHandler = require('./middlewares/errorHandler');
 const userRouter = require('./routes/userRoutes');
 const itemRouter = require('./routes/itemRoutes');
 const { Error404 } = require('./utils/error');
@@ -25,6 +25,8 @@ app.use('/items', itemRouter);
 app.use((req, res) => {
   Error404(res);
 })
+
+app.use(errors())
 
 app.use(errorHandler);
 
