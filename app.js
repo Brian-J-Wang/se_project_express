@@ -2,7 +2,7 @@ const { PORT = 3001 } = process.env;
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const errorHandler = require('./middlewares/error-handler');
+const errorHandler = require('./middlewares/errorHandler');
 
 const index = require('./routes/index');
 

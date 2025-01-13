@@ -1,5 +1,7 @@
 const { Error500, Error400, Error404, Error403 } = require('../utils/error');
 const item = require('../models/item');
+const BadRequestError = require('../utils/errors/BadRequestError');
+const NotFoundError = require('../utils/errors/notFoundError');
 
 module.exports.getItems = (req, res) => {
   item.find({})
@@ -7,7 +9,7 @@ module.exports.getItems = (req, res) => {
     res.send(items)
   })
   .catch(err => {
-    Error500(res, err);
+    next(err);
   })
 }
 
@@ -24,9 +26,9 @@ module.exports.createItem = (req, res) => {
   })
   .catch(err => {
     if (err.name === 'ValidationError') {
-      Error400(res);
+      next(new BadRequestError('Invalid Data'));
     } else {
-      Error500(res);
+      next(err);
     }
   });
 }
@@ -55,13 +57,13 @@ module.exports.deleteItem = (req, res) => {
   })
   .catch(err => {
     if (err.name === 'CastError') {
-      Error400(res);
+      next(new BadRequestError('Invalid Data'));
     } else if (err.name === 'MissingItem') {
-      Error404(res, err.message);
+      next(new NotFoundError(err.message));
     } else if (err.name === 'OwnerMismatch') {
-      Error403(res, err.message);
+      next(new ForbiddenError(err.message));
     } else {
-      Error500(res);
+      next(err);
     }
   })
 }
@@ -81,11 +83,11 @@ module.exports.likeItem = (req, res) => {
   })
   .catch(err => {
     if (err.name === "CastError") {
-      Error400(res);
+
     } else if (err.name === "InvalidId") {
-      Error404(res);
+      next(new NotFoundError());
     } else {
-      Error500(res);
+      next(err);
     }
   })
 }
@@ -105,9 +107,9 @@ module.exports.unlikeItem = (req, res) => {
   })
   .catch(err => {
     if (err.name === "CastError") {
-      Error400(res);
+      next(new BadRequestError());
     } else if (err.name === "MissingResource") {
-      Error404(res);
+      next(new NotFoundError());
     } else {
       Error500(res);
     }

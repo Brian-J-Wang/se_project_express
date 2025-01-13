@@ -3,6 +3,10 @@ const jwt = require('jsonwebtoken');
 const user = require('../models/user');
 const {secret} = require('../utils/config');
 const { Error500, Error400, Error404, Error409, Error401 } = require('../utils/error');
+const ConflictError = require('../utils/errors/ConflictError');
+const UnauthorizedError = require('../utils/errors/unauthorizedError');
+const BadRequestError = require('../utils/errors/BadRequestError');
+const NotFoundError = require('../utils/errors/notFoundError');
 
 module.exports.createUser = (req, res) => {
   const { name, avatar, email, password } = req.body;
@@ -27,11 +31,11 @@ module.exports.createUser = (req, res) => {
   })
   .catch(err => {
     if (err.name === 'MongoServerError') {
-      Error409(res);
+      next(new ConflictError("MongoDb Server Error"))
     } else if (err.name === 'ValidationError') {
-      Error400(res);
+      next(new UnauthorizedError("Validation Error"));
     } else {
-      Error500(res);
+      next(err);
     }
   });
 }
@@ -54,9 +58,9 @@ module.exports.login = (req, res) => {
   })
   .catch((err) => {
     if (err.message === 'Incorrect email or password') {
-      Error401(res, err.message);
+      next(new UnauthorizedError(err.message));
     } else {
-      Error500(res);
+      next(err);
     }
   })
 }
@@ -69,9 +73,9 @@ module.exports.getCurrentUser = (req, res) => {
   })
   .catch(err => {
     if (err.message === "User not Found") {
-      Error404(res, err.message);
+      next(new NotFoundError(err.message));
     } else {
-      Error500(res);
+      next(err);
     }
   });
 }
@@ -91,11 +95,11 @@ module.exports.updateUserProfile = (req, res) => {
   )
   .catch((err) => {
     if (err.name === "ValidationError") {
-      Error400(res);
+      next(new BadRequestError(err.message));
     } else if (err.message === "User not Found") {
-      Error404(res);
+      next(new NotFoundError(err.message));
     } else {
-      Error500(res);
+      next(err);
     }
   })
 }
