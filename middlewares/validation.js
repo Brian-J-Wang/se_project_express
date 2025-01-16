@@ -1,11 +1,23 @@
 const { Joi, celebrate } = require('celebrate');
 const validator = require('validator');
 
-const ValidateURL = (value, helpers) => {
+const validateURL = (value, helpers) => {
   if (validator.isURL(value)) {
     return value;
   } else {
     return helpers.error('string.uri');
+  }
+}
+
+const validateWeather = (value, helpers) => {
+  if (value == "") {
+    return helpers.error('string.empty');
+  }
+  const validValues = ["hot", "warm", "cold"];
+  if (validValues.includes(value)) {
+    return value;
+  } else {
+    return helpers.error('string.invalid');
   }
 }
 
@@ -16,9 +28,13 @@ module.exports.validateClothing = celebrate({
       'string.min': 'the name field must have a minimum length of 2',
       'string.max': 'the name field has a maximum length of 30'
     }),
-    url: Joi.string().required().custom(ValidateURL).messages({
+    imageUrl: Joi.string().required().custom(validateURL).messages({
       'string.empty': 'The "imageUrl" field must be filled in',
       'string.uri': 'the "imageUrl" field must be a valid url',
+    }),
+    weather: Joi.string().required().custom(validateWeather).messages({
+      'string.empty': 'The weather field must be selected',
+      'string.invalid': "Invalid value for weather"
     })
   })
 })
@@ -30,7 +46,7 @@ module.exports.validateUserInfo = celebrate({
       'string.min': 'the name field must have a minimum length of 2',
       'string.max': 'the name field has a maximum length of 30'
     }),
-    avatar: Joi.string().required().custom(ValidateURL).messages({
+    avatar: Joi.string().required().custom(validateURL).messages({
       'string.empty': 'The imageUrl field must be filled in',
       'string.uri': 'the imageUrl field must be a valid url',
     }),
@@ -70,6 +86,6 @@ module.exports.validateUserAccess = celebrate({
 
 module.exports.validateId = celebrate({
   params: Joi.object().keys({
-    Id: Joi.string().required().hex().length(24)
+    id: Joi.string().required().hex().length(24)
   })
 })
