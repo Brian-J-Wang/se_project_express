@@ -1,13 +1,13 @@
 const itemRouter = require('express').Router();
 const { getItems, createItem, deleteItem, likeItem, unlikeItem } = require('../controllers/itemController');
 const { authorize } = require('../middlewares/auth');
-const { validateId } = require('../middlewares/validation');
+const { validateClothing, validateId } = require('../middlewares/validation');
 
 itemRouter.get('/', getItems);
 
 itemRouter.use(authorize);
 
-itemRouter.post('/',  createItem);
+itemRouter.post('/', validateClothing, createItem);
 
 itemRouter.delete('/:itemId', validateId, deleteItem);
 

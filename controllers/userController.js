@@ -8,7 +8,7 @@ const UnauthorizedError = require('../utils/errors/unauthorizedError');
 const BadRequestError = require('../utils/errors/BadRequestError');
 const NotFoundError = require('../utils/errors/notFoundError');
 
-module.exports.createUser = (req, res) => {
+module.exports.createUser = (req, res, next)  => {
   const { name, avatar, email, password } = req.body;
 
   bcrypt.hash(password, 10)
@@ -40,7 +40,7 @@ module.exports.createUser = (req, res) => {
   });
 }
 
-module.exports.login = (req, res) => {
+module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
 
   if ( !email || !password ) {
@@ -65,7 +65,7 @@ module.exports.login = (req, res) => {
   })
 }
 
-module.exports.getCurrentUser = (req, res) => {
+module.exports.getCurrentUser = (req, res, next)  => {
   user.findOne({ _id: req.user })
   .orFail(new Error("User not Found"))
   .then(userData => {
@@ -80,7 +80,7 @@ module.exports.getCurrentUser = (req, res) => {
   });
 }
 
-module.exports.updateUserProfile = (req, res) => {
+module.exports.updateUserProfile = (req, res, next)  => {
   const { name, avatar } = req.body;
   user.findByIdAndUpdate(req.user,
     {

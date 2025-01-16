@@ -13,7 +13,7 @@ module.exports.getItems = (req, res) => {
   })
 }
 
-module.exports.createItem = (req, res) => {
+module.exports.createItem = (req, res, next) => {
   const { name, weather, imageUrl } = req.body;
   item.create({
     name,
@@ -33,7 +33,7 @@ module.exports.createItem = (req, res) => {
   });
 }
 
-module.exports.deleteItem = (req, res) => {
+module.exports.deleteItem = (req, res, next) => {
   const id = req.params.itemId;
 
   item.findById(id)
@@ -68,7 +68,7 @@ module.exports.deleteItem = (req, res) => {
   })
 }
 
-module.exports.likeItem = (req, res) => {
+module.exports.likeItem = (req, res, next) => {
   item.findByIdAndUpdate(req.params.itemId,
     { $addToSet: { likes: req.user._id } }, // add _id to the array if it's not there yet
     { new: true })
@@ -92,7 +92,7 @@ module.exports.likeItem = (req, res) => {
   })
 }
 
-module.exports.unlikeItem = (req, res) => {
+module.exports.unlikeItem = (req, res, next) => {
   item.findByIdAndUpdate(req.params.itemId,
     { $pull: { likes: req.user._id } }, // remove _id from the array
     { new: true },
