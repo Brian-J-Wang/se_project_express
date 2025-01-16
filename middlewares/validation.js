@@ -78,14 +78,8 @@ module.exports.validateClothingAccess = celebrate({
   })
 })
 
-module.exports.validateUserAccess = celebrate({
-  body: Joi.object().keys({
-    id: Joi.string().required().hex().length(24)
-  })
-})
-
 module.exports.validateId = celebrate({
   params: Joi.object().keys({
-    id: Joi.string().required().hex().length(24)
+    itemId: Joi.string().required().hex().length(24)
   })
 })
