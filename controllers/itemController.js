@@ -1,7 +1,7 @@
-const { Error500, Error400, Error404, Error403 } = require('../utils/error');
 const item = require('../models/item');
 const BadRequestError = require('../utils/errors/BadRequestError');
 const NotFoundError = require('../utils/errors/notFoundError');
+const ForbiddenError = require('../utils/errors/forbiddenError');
 
 module.exports.getItems = (req, res) => {
   item.find({})
@@ -111,7 +111,7 @@ module.exports.unlikeItem = (req, res, next) => {
     } else if (err.name === "MissingResource") {
       next(new NotFoundError());
     } else {
-      Error500(res);
+      next(new Error());
     }
   })
 }

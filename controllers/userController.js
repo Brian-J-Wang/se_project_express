@@ -2,7 +2,6 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const user = require('../models/user');
 const {secret} = require('../utils/config');
-const { Error500, Error400, Error404, Error409, Error401 } = require('../utils/error');
 const ConflictError = require('../utils/errors/ConflictError');
 const UnauthorizedError = require('../utils/errors/unauthorizedError');
 const BadRequestError = require('../utils/errors/BadRequestError');
@@ -44,7 +43,7 @@ module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
 
   if ( !email || !password ) {
-    Error400(res);
+    next(new BadRequestError());
     return;
   }
 
