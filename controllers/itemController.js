@@ -1,5 +1,5 @@
 const item = require('../models/item');
-const BadRequestError = require('../utils/errors/BadRequestError');
+const BadRequestError = require('../utils/errors/badRequestError');
 const NotFoundError = require('../utils/errors/notFoundError');
 const ForbiddenError = require('../utils/errors/forbiddenError');
 
