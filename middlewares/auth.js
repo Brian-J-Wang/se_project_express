@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const { Error401 } = require('../utils/error');
-const {secret} = require('../utils/config');
+const { JWT_SECRET } = require('../utils/config');
 const UnauthorizedError = require('../utils/errors/unauthorizedError');
 
 module.exports.authorize = (req, res, next) => {
@@ -14,7 +14,7 @@ module.exports.authorize = (req, res, next) => {
   let payload;
 
   try {
-    payload = jwt.verify(token, secret);
+    payload = jwt.verify(token, JWT_SECRET);
   } catch (err) {
     next(new UnauthorizedError("Bearer Token missing"));
   }

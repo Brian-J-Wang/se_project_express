@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const { errors } = require('celebrate');
+const dotenv = require('dotenv').config();
 
 const index = require('./routes/index');
 const errorHandler = require('./middlewares/errorHandler');
