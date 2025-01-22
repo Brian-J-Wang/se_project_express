@@ -3,7 +3,7 @@ const BadRequestError = require('../utils/errors/badRequestError');
 const NotFoundError = require('../utils/errors/notFoundError');
 const ForbiddenError = require('../utils/errors/forbiddenError');
 
-module.exports.getItems = (req, res) => {
+module.exports.getItems = (req, res, next) => {
   item.find({})
   .then(items => {
     res.send(items)
@@ -82,9 +82,7 @@ module.exports.likeItem = (req, res, next) => {
     res.send(itemData);
   })
   .catch(err => {
-    if (err.name === "CastError") {
-
-    } else if (err.name === "InvalidId") {
+    if (err.name === "InvalidId") {
       next(new NotFoundError());
     } else {
       next(err);

@@ -3,7 +3,6 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const { errors } = require('celebrate');
-const dotenv = require('dotenv').config();
 
 const index = require('./routes/index');
 const errorHandler = require('./middlewares/errorHandler');
@@ -11,6 +10,7 @@ const userRouter = require('./routes/userRoutes');
 const itemRouter = require('./routes/itemRoutes');
 const { Error404 } = require('./utils/error');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const NotFoundError = require('./utils/errors/notFoundError');
 
 mongoose.connect('mongodb://127.0.0.1:27017/wtwr_db');
 const app = express();
@@ -26,8 +26,8 @@ app.use('/users', userRouter);
 
 app.use('/items', itemRouter);
 
-app.use((req, res) => {
-  Error404(res);
+app.use((req, res, next) => {
+  next(new NotFoundError('Route Not Found'));
 })
 
 app.use(errorLogger);

@@ -4,21 +4,19 @@ const validator = require('validator');
 const validateURL = (value, helpers) => {
   if (validator.isURL(value)) {
     return value;
-  } else {
-    return helpers.error('string.uri');
   }
+  return helpers.error('string.uri');
 }
 
 const validateWeather = (value, helpers) => {
-  if (value == "") {
+  if (value === "") {
     return helpers.error('string.empty');
   }
   const validValues = ["hot", "warm", "cold"];
   if (validValues.includes(value)) {
     return value;
-  } else {
-    return helpers.error('string.invalid');
   }
+  return helpers.error('string.invalid');
 }
 
 module.exports.validateClothing = celebrate({
@@ -59,6 +57,20 @@ module.exports.validateUserInfo = celebrate({
     password: Joi.string().required().messages({
       'string.empty': "The password field must be filled im"
     })
+  })
+})
+
+module.exports.validateUpdateUserInfo = celebrate({
+  body: Joi.object().keys({
+    name: Joi.string().required().min(2).max(30).messages({
+      'string.empty': 'The name field must be filled in',
+      'string.min': 'the name field must have a minimum length of 2',
+      'string.max': 'the name field has a maximum length of 30'
+    }),
+    avatar: Joi.string().required().custom(validateURL).messages({
+      'string.empty': 'The imageUrl field must be filled in',
+      'string.uri': 'the imageUrl field must be a valid url',
+    }),
   })
 })
 
