@@ -1,5 +1,9 @@
 # WTWR (What to Wear?): Back End
   This back-end project is for the WTWR application. It currently contains endpoints for fetching users and items created by users built using nodejs and express.
+
+## Visiting the website
+  You can visit the website at [www.WhatToW.jumpingcrab.com](www.WhatToW.jumpingcrab.com)
+
 ## Running the Project
 `npm run start` — to launch the server 
 
