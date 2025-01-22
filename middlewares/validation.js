@@ -22,6 +22,8 @@ const validateWeather = (value, helpers) => {
 }
 
 module.exports.validateClothing = celebrate({
+  headers: Joi.object().keys({
+  }).unknown(true),
   body: Joi.object().keys({
     name: Joi.string().required().min(2).max(30).messages({
       'string.empty': 'The name field must be filled in',
