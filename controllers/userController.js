@@ -31,10 +31,8 @@ module.exports.createUser = (req, res, next)  => {
   .catch(err => {
     if (err.name === 'MongoServerError') {
       next(new ConflictError("MongoDb Server Error"))
-    } else if (err.name === 'Authorization Error') {
-      next(new UnauthorizedError("Authorization Error"));
     } else {
-      next(err);
+      next(new BadRequestError("Bad Request"));
     }
   });
 }
