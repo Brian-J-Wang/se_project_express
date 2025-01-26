@@ -8,7 +8,6 @@ const index = require('./routes/index');
 const errorHandler = require('./middlewares/errorHandler');
 const userRouter = require('./routes/userRoutes');
 const itemRouter = require('./routes/itemRoutes');
-const { Error404 } = require('./utils/error');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const NotFoundError = require('./utils/errors/notFoundError');
 
